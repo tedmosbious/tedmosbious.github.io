@@ -15,6 +15,7 @@ let btn5 = document.getElementById("btn5");
 let btn6 = document.getElementById("btn6");
 
 btn1.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=1&chat_id=2053847245");
 	if (tg.MainButton.isVisible) {
 		tg.MainButton.hide();
 	}
@@ -26,6 +27,7 @@ btn1.addEventListener("click", function(){
 });
 
 btn2.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=2&chat_id=2053847245");
 	if (tg.MainButton.isVisible) {
 		tg.MainButton.hide();
 	}
@@ -94,8 +96,3 @@ ${tg.initDataUnsafe.user.last_name}`;
 
 
 usercard.appendChild(p); 
-
-
-
-
-

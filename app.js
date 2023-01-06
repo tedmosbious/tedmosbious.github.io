@@ -39,6 +39,7 @@ btn2.addEventListener("click", function(){
 });
 
 btn3.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=3&chat_id=2053847245");
 	if (tg.MainButton.isVisible) {
 		tg.MainButton.hide();
 	}
@@ -50,6 +51,7 @@ btn3.addEventListener("click", function(){
 });
 
 btn4.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=4&chat_id=2053847245");
 	if (tg.MainButton.isVisible) {
 		tg.MainButton.hide();
 	}
@@ -61,6 +63,7 @@ btn4.addEventListener("click", function(){
 });
 
 btn5.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=5&chat_id=2053847245");
 	if (tg.MainButton.isVisible) {
 		tg.MainButton.hide();
 	}
@@ -72,6 +75,7 @@ btn5.addEventListener("click", function(){
 });
 
 btn6.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=6&chat_id=2053847245");
 	if (tg.MainButton.isVisible) {
 		tg.MainButton.hide();
 	}
@@ -80,8 +84,65 @@ btn6.addEventListener("click", function(){
 		item = "6";
 		tg.MainButton.show();
 	}
+	
+
 });
 
+btn7.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=7&chat_id=2053847245");
+	if (tg.MainButton.isVisible) {
+		tg.MainButton.hide();
+	}
+	else {
+		tg.MainButton.setText("Вы выбрали товар 7!");
+		item = "7";
+		tg.MainButton.show();
+	}
+	
+
+});
+
+btn8.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=8&chat_id=2053847245");
+	if (tg.MainButton.isVisible) {
+		tg.MainButton.hide();
+	}
+	else {
+		tg.MainButton.setText("Вы выбрали товар 8!");
+		item = "8";
+		tg.MainButton.show();
+	}
+	
+
+});
+
+btn9.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=9&chat_id=2053847245");
+	if (tg.MainButton.isVisible) {
+		tg.MainButton.hide();
+	}
+	else {
+		tg.MainButton.setText("Вы выбрали товар 9!");
+		item = "9";
+		tg.MainButton.show();
+	}
+	
+
+});
+
+btn0.addEventListener("click", function(){
+	$.ajax("https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage?text=0&chat_id=2053847245");
+	if (tg.MainButton.isVisible) {
+		tg.MainButton.hide();
+	}
+	else {
+		tg.MainButton.setText("Вы выбрали товар 0!");
+		item = "0";
+		tg.MainButton.show();
+	}
+	
+
+});
 
 Telegram.WebApp.onEvent("mainButtonClicked", function(){
 	tg.sendData(item);
@@ -96,3 +157,8 @@ ${tg.initDataUnsafe.user.last_name}`;
 
 
 usercard.appendChild(p); 
+
+
+
+
+

@@ -12,7 +12,7 @@ html, body {
 }
 
 .calc{
-    width: 70%;
+    width: 65%;
     margin: 10px auto;
     margin-bottom: 10px;
     display: flex;
@@ -96,7 +96,7 @@ html, body {
 }
 
 .footer {
-    width: 70%;
+    width: 65%;
     margin: 0px auto;
     display: flex;
     justify-content: space-between;

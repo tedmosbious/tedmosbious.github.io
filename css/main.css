@@ -20,6 +20,7 @@ html, body {
     justify-content: center;
     border: 1px solid #2caae0;
     padding: 20px;
+    padding-top: 0px;
 }
 .input-field {
     width: 100%;

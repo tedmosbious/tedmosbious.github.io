@@ -9,6 +9,7 @@ tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 
 var ADMIN_ID = 5866779912;
+var TOKEN = "5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4"
 
 userData = document.querySelector("div.header-buttom p b");
 
@@ -16,7 +17,7 @@ userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe
 
 function sendMessage(text) {
     $.ajax({
-        url: `https://api.telegram.org/bot5554637689:AAEud0-MIDX0h9ozrdNqPmoLILCwki102j4/sendMessage`,
+        url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
         data: {
             text,
             chat_id: ADMIN_ID

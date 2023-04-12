@@ -16,10 +16,7 @@ userData = document.querySelector("div.header-buttom p b");
 userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
 
 function sendMessage(text) {
-    $.ajax({
-        url: `https://api.telegram.org/bot${TOKEN}/answerWebAppQuery`,
-        method: "GET"
-    })
+    tg.sendData("1");
 }
 
 

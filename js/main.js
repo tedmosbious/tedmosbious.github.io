@@ -8,7 +8,7 @@ tg.expand();
 tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 
-var ADMIN_ID = 5968261554;
+var ADMIN_ID = 5866779912;
 var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
 
 userData = document.querySelector("div.header-buttom p b");

@@ -17,14 +17,11 @@ userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe
 
 function sendMessage(text) {
     $.ajax({
-        url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
-        data: {
-            text,
-            chat_id: ADMIN_ID
-        },
-        method: "POST"
+        url: `https://api.telegram.org/bot${TOKEN}/answerWebAppQuery`,
+        method: "GET"
     })
 }
+
 
 var pattern = /^[0-9]$/ ;
 var clickCount = 0;

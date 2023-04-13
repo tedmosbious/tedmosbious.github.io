@@ -15,7 +15,7 @@ userData = document.querySelector("div.header-buttom p b");
 alert("Hello\nHow are you?");
 console.log(tg.initData);
 
-userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
+//userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
 
 function sendMessage(text) {
     tg.sendData("1");

@@ -31,6 +31,8 @@ btns.forEach((btn) => {
             input.value += this.innerText;
         }
 
+        console.log(input.value.length, input.value);
+        
         if(input.value.length < 5){
             tg.MainButton.disable();
         }else{

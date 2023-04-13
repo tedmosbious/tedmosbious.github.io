@@ -9,7 +9,7 @@ tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 tg.MainButton.setText( 'Подтвердить' );
 tg.MainButton.show();
-tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
+tg.MainButton.setParams({"color": "#c5c9c9"}); //меняем цвет
 tg.MainButton.disable() //скрываем кнопку
 
 userData = document.querySelector("div.header-buttom p b");

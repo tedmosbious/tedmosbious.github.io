@@ -29,7 +29,7 @@ html, body {
 }
 
 .input-field input {
-    width: 45%;
+    width: 75%;
     height: 30px;
     border: 1px solid #2caae0;
     direction: rtl;

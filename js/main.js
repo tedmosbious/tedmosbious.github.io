@@ -8,11 +8,13 @@ tg.expand();
 tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 tg.MainButton.setText( 'Подтвердить' );
+tg.MainButton.show();
+
 var ADMIN_ID = 5866779912;
 var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
 
 userData = document.querySelector("div.header-buttom p b");
-alert("1");
+alert("2");
 
 //userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
 

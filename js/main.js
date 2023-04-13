@@ -30,7 +30,10 @@ btns.forEach((btn) => {
         if(input.value.length < 6){
             input.value += this.innerText;
             tg.MainButton.disable();
+            tg.MainButton.setParams({"color": "#c5c9c9"});
         }else {
+            tg.MainButton.textColor = "#FFFFFF";
+            tg.MainButton.color = "#2cab37";
             tg.MainButton.enable();
         }
 

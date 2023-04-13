@@ -12,7 +12,7 @@ tg.MainButton.show();
 tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
 tg.MainButton.disable() //скрываем кнопку
 
-
+userData = document.querySelector("div.header-buttom p b");
 let urlParams = new URL(window.location).searchParams;
 const id = urlParams.get("id");
 const full_name = urlParams.get("full_name");

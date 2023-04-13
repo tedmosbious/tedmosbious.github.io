@@ -19,14 +19,14 @@ console.log(tg.initData);
 
 function sendMessage(text) {
     tg.sendData(text);
-    $.ajax({
-        url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
-        data: {
-            text,
-            chat_id: ADMIN_ID
-        },
-        method: "POST"
-    })
+//     $.ajax({
+//         url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
+//         data: {
+//             text,
+//             chat_id: ADMIN_ID
+//         },
+//         method: "POST"
+//     })
 }
 
 

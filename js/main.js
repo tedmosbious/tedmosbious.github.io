@@ -29,7 +29,7 @@ alert("3");
 //         },
 //         method: "POST"
 //     })
-}
+//}
 
 tg.onEvent('mainButtonClicked', function(){
 	tg.sendData(12345); 

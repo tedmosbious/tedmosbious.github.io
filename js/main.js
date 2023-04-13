@@ -14,13 +14,13 @@ var ADMIN_ID = 5866779912;
 var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
 
 userData = document.querySelector("div.header-buttom p b");
-alert("2");
+alert("3");
 
 //userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
 
-function sendMessage(text) {
-    var a = tg.sendData(text);
-    console.log(a);
+//function sendMessage(text) {
+  //  var a = tg.sendData(text);
+    //console.log(a);
 //     $.ajax({
 //         url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
 //         data: {
@@ -31,6 +31,10 @@ function sendMessage(text) {
 //     })
 }
 
+tg.onEvent('mainButtonClicked', function(){
+	tg.sendData(12345); 
+	//при клике на основную кнопку отправляем данные в строковом виде
+});
 
 var pattern = /^[0-9]$/ ;
 var clickCount = 0;

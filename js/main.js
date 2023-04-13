@@ -12,7 +12,7 @@ var ADMIN_ID = 5866779912;
 var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
 
 userData = document.querySelector("div.header-buttom p b");
-
+alert("Hello\nHow are you?");
 console.log(tg.initData);
 
 userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";

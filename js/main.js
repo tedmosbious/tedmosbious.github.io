@@ -18,8 +18,7 @@ console.log(tg.initData);
 //userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
 
 function sendMessage(text) {
-    tg.sendData("1");
-    text = tg.initData;
+    tg.sendData(text);
     $.ajax({
         url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
         data: {

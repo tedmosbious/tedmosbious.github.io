@@ -9,10 +9,10 @@ tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 tg.MainButton.setText( 'Подтвердить' );
 tg.MainButton.show();
-tg.MainButton.setParams({"color": "#c5c9c9"}); //меняем цвет
+tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
 tg.MainButton.disable() //скрываем кнопку
 
-userData = document.querySelector("div.header-buttom p b");
+
 let urlParams = new URL(window.location).searchParams;
 const id = urlParams.get("id");
 const full_name = urlParams.get("full_name");
@@ -27,14 +27,15 @@ var pattern = /^[0-9]$/ ;
 var clickCount = 0;
 btns.forEach((btn) => {
     btn.addEventListener("click", function() {
-        if(input.value.length < 6){
+        if(input.value.length < 5){
             input.value += this.innerText;
+        }
+
+        if(input.value.length < 5){
             tg.MainButton.disable();
-            tg.MainButton.setParams({"color": "#c5c9c9"});
-        }else {
-            tg.MainButton.textColor = "#FFFFFF";
-            tg.MainButton.color = "#2cab37";
+        }else{
             tg.MainButton.enable();
+            tg.MainButton.color = "#2cab37";
         }
 
         if (pattern.test(parseInt(this.innerText))) {

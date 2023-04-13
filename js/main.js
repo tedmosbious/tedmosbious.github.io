@@ -9,7 +9,8 @@ tg.MainButton.textColor = "#FFFFFF";
 tg.MainButton.color = "#2cab37";
 tg.MainButton.setText( 'Подтвердить' );
 tg.MainButton.show();
-tg.MainButton.disable();
+tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
+tg.MainButton.disable() //скрываем кнопку 
 
 //var ADMIN_ID = 5866779912;
 //var TOKEN = "5968261554:AAEgMw9yRV6_yIni3qUQOYZo72Q75PkabhA"

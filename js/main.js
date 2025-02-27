@@ -21,7 +21,7 @@ const chatId = '5625291747';
 const message = full_name + " (" + id + ")";
 
 tg.onEvent('mainButtonClicked', function(){
-    tg.sendData(input.value); 
+    //tg.sendData(input.value); 
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message + input.value)}`;
     fetch(url)
   .then(response => response.json())
@@ -76,7 +76,7 @@ btns.forEach((btn) => {
                 input.style.border = "1px solid red";
                 return 0;
             }else{
-                tg.sendData(input.value);
+               // tg.sendData(input.value);
                     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message + input.value)}`;
                 fetch(url)
               .then(response => response.json())

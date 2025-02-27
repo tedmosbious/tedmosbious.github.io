@@ -20,9 +20,27 @@ const botToken = '7662919654:AAFAW2XBWcdWlde-hNLiCOTfr230_L_KFVw';
 const chatId = '5625291747';
 const message = full_name + " (" + id + ")";
 
+document.querySelector('button[data-key="CHECK"]').addEventListener('click', async () => {
+    const url =  `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message + input.value)}`;
+
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            alert('Request Sent Successfully!');
+        } else {
+            alert('Failed to send request.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred.');
+    }
+});
+
+
+
 tg.onEvent('mainButtonClicked', function(){
     //tg.sendData(input.value); 
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message + input.value)}`;
+    const url =;
     fetch(url)
   .then(response => response.json())
   .then(data => console.log(data))

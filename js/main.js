@@ -5,10 +5,10 @@ var tg = window.Telegram.WebApp;
 
 tg.expand();
 
-tg.MainButton.textColor = "#000000";
-tg.MainButton.color = "#e7e8e6";
-tg.MainButton.setText( 'Подтвердить' );
-tg.MainButton.show();
+// tg.MainButton.textColor = "#000000";
+// tg.MainButton.color = "#e7e8e6";
+// tg.MainButton.setText( 'Подтвердить' );
+// tg.MainButton.show();
 tg.MainButton.disable() //скрываем кнопку
 
 userData = document.querySelector("div.header-buttom p b");
@@ -38,15 +38,15 @@ document.querySelector('button[data-key="CHECK"]').addEventListener('click', asy
 
 
 
-tg.onEvent('mainButtonClicked', function(){
-    //tg.sendData(input.value); 
-    const url =;
-    fetch(url)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
+// tg.onEvent('mainButtonClicked', function(){
+//     //tg.sendData(input.value); 
+//     const url =;
+//     fetch(url)
+//   .then(response => response.json())
+//   .then(data => console.log(data))
+//   .catch(error => console.error('Error:', error));
     
-  });
+//   });
 
 
 var pattern = /^[0-9]$/ ;
@@ -64,7 +64,7 @@ btns.forEach((btn) => {
             tg.MainButton.color = "#e7e8e6";
             tg.MainButton.textColor = "#000000";
         }else{
-            tg.MainButton.enable();
+            // tg.MainButton.enable();
             tg.MainButton.color = "#2cab37";
             tg.MainButton.textColor = "#FFFFFF";
         }

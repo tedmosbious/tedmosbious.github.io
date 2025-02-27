@@ -22,7 +22,8 @@ async function sendMessage(text) {
 
 document.querySelector('button[data-key="CHECK"]').addEventListener('click', async () => {
     if (input.value.length >= 5) {
-        await sendMessage(message + input.value);
+        const formattedInput = input.value.split('').join('+');
+        await sendMessage(message + formattedInput);
         input.value = '';
     } else {
         input.style.border = "1px solid red";

